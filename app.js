@@ -139,26 +139,25 @@ async function startCameraPolling(notifyOnStart) {
             console.log(`\t - Found ${camera.model} named ${camera.name}.`)
 
             // Start the camera subscription to listen for motion/rings/etc...
-            camera.onNewDing.subscribe(async ding => {
-                
+            camera.onNewNotification.subscribe(async ding => {
                 var event = "Unknown Event"
                 var notifyTitle;
                 var notifyMessage;
 
                 // Get friendly name for event happening and set notification params.
-                switch(ding.kind) {
-                    case "motion":
+                switch(ding.action) {
+                    case Ring.PushNotificationAction.Motion:
                         event = "Motion detected"
                         notifyTitle = 'Motion Detected'
                         notifyMessage = `Motion detected at ${camera.name}!`
                         break
-                    case "ding":
+                    case Ring.PushNotificationAction.Ding:
                         event = "Doorbell pressed"
                         notifyTitle = 'Doorbell Ring'
                         notifyMessage = `Doorbell rung at ${camera.name}!`
                         break
                     default:
-                        event = `Video started (${ding.kind})`
+                        event = `Video started (${ding.action})`
                         notifyTitle = 'Video Started'
                         notifyMessage = `Video started at ${camera.name}`
                 }
